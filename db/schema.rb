@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160521015925) do
+ActiveRecord::Schema.define(version: 20160524014032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,9 +19,23 @@ ActiveRecord::Schema.define(version: 20160521015925) do
   create_table "appointments", force: :cascade do |t|
     t.string   "title"
     t.datetime "start"
-    t.integer  "status"
+    t.integer  "status",           default: 0
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "schedule_id"
+    t.boolean  "manually_updated", default: false
+    t.index ["schedule_id"], name: "index_appointments_on_schedule_id", using: :btree
+  end
+
+  create_table "schedules", force: :cascade do |t|
+    t.integer  "pattern"
+    t.integer  "time"
+    t.string   "title"
+    t.date     "start"
+    t.date     "end"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "appointments", "schedules"
 end

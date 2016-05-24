@@ -26,7 +26,7 @@ class AppointmentsController < ApplicationController
 
   # PATCH/PUT /appointments/1
   def update
-    if @appointment.update(appointment_params)
+    if @appointment.update(appointment_params.merge(manually_updated: true))
       render json: @appointment
     else
       render json: @appointment.errors, status: :unprocessable_entity
