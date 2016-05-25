@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class SchedulesControllerTest < ActionDispatch::IntegrationTest
+  include ActiveSupport::Testing::TimeHelpers
   setup do
     @schedule = schedules(:one)
   end
@@ -39,6 +40,17 @@ class SchedulesControllerTest < ActionDispatch::IntegrationTest
   test "should destroy schedule" do
     assert_difference('Schedule.count', -1) do
       delete schedule_url(@schedule)
+    end
+
+    assert_response 204
+  end
+
+  test "should destroy future planned appointments" do
+    travel_to Time.new(2016, 5, 24, 0, 0, 0) do
+      schedule = ScheduleCreator.call({ end: @schedule.end, pattern: @schedule.pattern, start: @schedule.start, time: @schedule.time, title: @schedule.title })
+      assert_difference('Appointment.count', -4) do
+        delete schedule_url(schedule)
+      end
     end
 
     assert_response 204

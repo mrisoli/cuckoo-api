@@ -1,19 +1,16 @@
 class SchedulesController < ApplicationController
   before_action :set_schedule, only: [:show, :update, :destroy]
 
-  # GET /schedules
   def index
-    @schedules = Schedule.all
+    @appointments = Schedule.all
 
     render json: @schedules
   end
 
-  # GET /schedules/1
   def show
     render json: @schedule
   end
 
-  # POST /schedules
   def create
     if @schedule = ScheduleCreator.call(schedule_params)
       render json: @schedule, status: :created, location: @schedule
@@ -22,7 +19,6 @@ class SchedulesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /schedules/1
   def update
     if @schedule.update(schedule_params)
       render json: @schedule
@@ -31,9 +27,8 @@ class SchedulesController < ApplicationController
     end
   end
 
-  # DELETE /schedules/1
   def destroy
-    @schedule.destroy
+    ScheduleDestroyer.call(@schedule)
   end
 
   private
