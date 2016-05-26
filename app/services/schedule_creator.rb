@@ -3,6 +3,7 @@ class ScheduleCreator
   attr_reader :schedule
 
   def initialize(params)
+    params[:time] = Time.parse(params[:time]).seconds_since_midnight.to_i
     @schedule = Schedule.new(params)
   end
 

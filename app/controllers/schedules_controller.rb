@@ -2,13 +2,13 @@ class SchedulesController < ApplicationController
   before_action :set_schedule, only: [:show, :update, :destroy]
 
   def index
-    @appointments = Schedule.all
+    @schedules = Schedule.all
 
     render json: @schedules
   end
 
   def show
-    render json: @schedule
+    render json: @schedule.appointments
   end
 
   def create
@@ -32,12 +32,11 @@ class SchedulesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
     def set_schedule
       @schedule = Schedule.find(params[:id])
     end
 
-    # Only allow a trusted parameter "white list" through.
     def schedule_params
       params.require(:schedule).permit(:pattern, :time, :title, :start, :end)
     end
