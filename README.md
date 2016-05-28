@@ -1,24 +1,7 @@
-# README
+# Cuckoo API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a simple appointments and scheduler API leveraging Rails 5 new API module
 
-Things you may want to cover:
+It uses Rails 5.0 beta and ruby 2.3.0
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+All usual CRUD functionalities are implemented through a json API
