@@ -12,7 +12,7 @@ class SchedulesController < ApplicationController
   end
 
   def create
-    if @schedule = ScheduleCreator.call(schedule_params)
+    if @schedule = Schedules::Creator.call(schedule_params)
       render json: @schedule, status: :created, location: @schedule
     else
       render json: @schedule.errors, status: :unprocessable_entity
@@ -20,7 +20,7 @@ class SchedulesController < ApplicationController
   end
 
   def update
-    if @schedule.update(schedule_params)
+    if Schedules::Updater.call(@schedule, schedule_params)
       render json: @schedule
     else
       render json: @schedule.errors, status: :unprocessable_entity
@@ -28,7 +28,7 @@ class SchedulesController < ApplicationController
   end
 
   def destroy
-    ScheduleDestroyer.call(@schedule)
+    Schedules::Destroyer.call(@schedule)
   end
 
   private

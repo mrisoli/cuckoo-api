@@ -37,6 +37,20 @@ class SchedulesControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
   end
 
+  test "should update all appointments" do
+    schedule = Schedules::Creator.call({ end: @schedule.end, pattern: @schedule.pattern, start: @schedule.start, time: '14:00', title: @schedule.title })
+    patch schedule_url(schedule), params: { schedule: { title: "New title"} }
+    assert_equal(schedule.appointments.pluck(:title).uniq, ["New title"])
+  end
+
+  test "should NOT update manually updated appointments" do
+    schedule = Schedules::Creator.call({ end: @schedule.end, pattern: @schedule.pattern, start: @schedule.start, time: '14:00', title: @schedule.title })
+    manually_updated = schedule.appointments.take
+    manually_updated.update(title: "Manually updated appointment", manually_updated: true)
+    patch schedule_url(schedule), params: { schedule: { title: "New title"} }
+    assert_equal(manually_updated.title, "Manually updated appointment")
+  end
+
   test "should destroy schedule" do
     assert_difference('Schedule.count', -1) do
       delete schedule_url(@schedule)
@@ -47,7 +61,7 @@ class SchedulesControllerTest < ActionDispatch::IntegrationTest
 
   test "should destroy future planned appointments" do
     travel_to Time.new(2016, 5, 24, 0, 0, 0) do
-      schedule = ScheduleCreator.call({ end: @schedule.end, pattern: @schedule.pattern, start: @schedule.start, time: '14:00', title: @schedule.title })
+      schedule = Schedules::Creator.call({ end: @schedule.end, pattern: @schedule.pattern, start: @schedule.start, time: '14:00', title: @schedule.title })
       assert_difference('Appointment.count', -5) do
         delete schedule_url(schedule)
       end
